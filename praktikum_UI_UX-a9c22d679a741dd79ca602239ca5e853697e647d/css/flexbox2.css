@@ -1,0 +1,71 @@
+/* CSS Layout Flexbox 2 (Gambar 6) */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: Arial, sans-serif;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    background-color: #f0f2f5;
+    padding: 20px;
+}
+
+.layout-container {
+    width: 650px;
+    height: 480px;
+    display: flex;
+    flex-direction: column;
+    border: 1px solid #ddd;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.15);
+    background-color: #ffffff;
+}
+
+header {
+    background-color: #eedc82; /* Warna kuning khaki */
+    padding: 15px 20px;
+    font-size: 15px;
+    color: #222;
+    height: 60px;
+}
+
+main {
+    display: flex;
+    flex: 1;
+}
+
+article {
+    background-color: #ffffff;
+    flex: 3;
+    padding: 20px;
+    font-size: 15px;
+    color: #222;
+}
+
+aside {
+    background-color: #ffc0cb; /* Pink */
+    flex: 1.1;
+    padding: 20px;
+    font-size: 15px;
+    color: #222;
+}
+
+nav {
+    background-color: #00d2d3; /* Cyan / Toska Cerah */
+    flex: 1.1;
+    padding: 20px;
+    font-size: 15px;
+    color: #222;
+}
+
+footer {
+    background-color: #eedc82; /* Warna kuning khaki */
+    padding: 15px 20px;
+    font-size: 15px;
+    color: #222;
+    height: 60px;
+}

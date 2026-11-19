@@ -1,0 +1,101 @@
+/* CSS Flexbox 3 (Gambar 7 - Representative Flex Layout Example) */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: Arial, sans-serif;
+    background-color: #f0f2f5;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 30px 20px;
+    min-height: 100vh;
+}
+
+.title-section {
+    text-align: center;
+    margin-bottom: 25px;
+}
+
+.title-section h2 {
+    font-size: 22px;
+    color: #2c3e50;
+    margin-bottom: 6px;
+}
+
+.title-section p {
+    font-size: 14px;
+    color: #666;
+}
+
+/* Galeri Wrapper */
+.gallery-container {
+    width: 720px;
+    background: #ffffff;
+    border: 1px solid #d0d0d0;
+    border-radius: 8px;
+    padding: 24px;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+/* Baris Flexbox */
+.flex-row {
+    display: flex;
+    gap: 12px;
+    width: 100%;
+}
+
+
+.photo-box {
+    flex: 1;
+    height: 110px;
+    border: 3px solid #222222;
+    border-radius: 8px;
+    overflow: hidden;
+    position: relative;
+    background-color: #c4c4c4;
+    transition: transform 0.25s ease, box-shadow 0.25s ease;
+    cursor: pointer;
+}
+
+.photo-box:hover {
+    transform: scale(1.02);
+    box-shadow: 0 6px 16px rgba(0, 0, 0, 0.2);
+}
+
+.photo-box img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+    transition: filter 0.25s ease;
+}
+
+.photo-box:hover img {
+    filter: brightness(1.05);
+}
+
+
+.photo-box .caption {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    background: rgba(0, 0, 0, 0.65);
+    color: #ffffff;
+    font-size: 11px;
+    padding: 3px 6px;
+    text-align: center;
+    opacity: 0;
+    transition: opacity 0.2s ease;
+}
+
+.photo-box:hover .caption {
+    opacity: 1;
+}

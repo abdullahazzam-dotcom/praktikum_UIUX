@@ -1,0 +1,86 @@
+/* CSS Layout Flexbox 4 (a) - Gambar 8 (a) layout flexbox 1 */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: Arial, sans-serif;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    background-color: #f0f2f5;
+    padding: 20px;
+}
+
+.caption-label {
+    margin-top: 15px;
+    font-size: 14px;
+    font-style: italic;
+    color: #444;
+}
+
+.layout-container {
+    width: 650px;
+    height: 420px;
+    display: flex;
+    border: 1px solid #d0d0d0;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.15);
+    background-color: #ffffff;
+}
+
+/* Nav Sidebar di Kiri Penuh */
+nav {
+    width: 140px;
+    background-color: #ffccd5; /* Pink Lembut */
+    padding: 15px;
+    font-size: 14px;
+    color: #222;
+}
+
+/* Sisi Kanan: Header, Main (Article + Aside), Footer */
+.right-content {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+}
+
+header {
+    background-color: #f5e687; /* Kuning Khaki */
+    padding: 12px 20px;
+    font-size: 14px;
+    color: #222;
+    height: 50px;
+}
+
+main {
+    display: flex;
+    flex: 1;
+}
+
+article {
+    background-color: #ffffff;
+    flex: 3;
+    padding: 15px 20px;
+    font-size: 14px;
+    color: #222;
+}
+
+aside {
+    background-color: #00e5ff; /* Cyan / Toska Cerah */
+    flex: 1.2;
+    padding: 15px 20px;
+    font-size: 14px;
+    color: #222;
+}
+
+footer {
+    background-color: #f5e687; /* Kuning Khaki */
+    padding: 12px 20px;
+    font-size: 14px;
+    color: #222;
+    height: 50px;
+}

@@ -1,0 +1,1092 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Praktikum 5 - CSS Box & FlexBox Luxury GT Dashboard</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Caveat:wght@600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #2563eb;
+            --primary-deep: #1d4ed8;
+            --primary-dark: #0f172a;
+            --accent-cyan: #0ea5e9;
+            --accent-gold: #f59e0b;
+            --accent-gold-soft: #fef3c7;
+            --primary-glow: rgba(37, 99, 235, 0.35);
+            --gold-glow: rgba(245, 158, 11, 0.25);
+            --glass-bg: rgba(255, 255, 255, 0.82);
+            --glass-bg-subtle: rgba(255, 255, 255, 0.7);
+            --glass-border: rgba(255, 255, 255, 0.85);
+            --glass-shadow: 0 16px 38px -10px rgba(15, 23, 42, 0.3), 0 0 0 1px rgba(255, 255, 255, 0.4);
+            --text-dark: #0f172a;
+            --text-muted: #475569;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, sans-serif;
+        }
+
+        body {
+            min-height: 100vh;
+            background: url('img/bg-cherry-car.jpg') no-repeat center center fixed;
+            background-size: cover;
+            color: var(--text-dark);
+            padding: 24px 20px 50px 20px;
+            position: relative;
+            overflow-x: hidden;
+        }
+
+        /* Ambient Cinematic Luxury Obsidian & Sapphire Overlay */
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(135deg, rgba(15, 23, 42, 0.72) 0%, rgba(30, 41, 59, 0.58) 50%, rgba(15, 23, 42, 0.78) 100%);
+            backdrop-filter: blur(1.5px);
+            -webkit-backdrop-filter: blur(1.5px);
+            z-index: 0;
+            pointer-events: none;
+        }
+
+        /* Canvas Partikel Halus (Moonlight Petals & Ambient Dust) */
+        #sakura-canvas {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 1;
+        }
+
+        .dashboard-wrapper {
+            position: relative;
+            z-index: 2;
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        /* Top HUD Status (Bar Elegan Tanpa Navbar) */
+        .hud-topbar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 16px;
+            margin-bottom: 24px;
+        }
+
+        .hud-badge-brand {
+            background: rgba(255, 255, 255, 0.88);
+            backdrop-filter: blur(14px);
+            border: 1px solid var(--glass-border);
+            padding: 8px 18px;
+            border-radius: 40px;
+            box-shadow: var(--glass-shadow);
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            font-size: 13.5px;
+            font-weight: 700;
+            color: var(--primary-deep);
+            animation: floatSlow 4s ease-in-out infinite alternate;
+        }
+
+        .hud-badge-brand .brand-icon {
+            font-size: 16px;
+            display: inline-block;
+            filter: drop-shadow(0 2px 4px rgba(37, 99, 235, 0.4));
+        }
+
+        .hud-stats-group {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            flex-wrap: wrap;
+        }
+
+        .hud-pill {
+            background: rgba(255, 255, 255, 0.85);
+            backdrop-filter: blur(14px);
+            border: 1px solid var(--glass-border);
+            padding: 8px 16px;
+            border-radius: 30px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.12);
+            font-size: 13px;
+            font-weight: 600;
+            color: var(--text-dark);
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .hud-pill.highlight {
+            background: linear-gradient(135deg, #1e40af 0%, #2563eb 100%);
+            color: white;
+            border: none;
+            box-shadow: 0 4px 18px var(--primary-glow);
+        }
+
+        /* Layout Grid Dashboard 2 Kolom */
+        .main-dashboard {
+            display: grid;
+            grid-template-columns: 340px 1fr;
+            gap: 24px;
+            align-items: start;
+        }
+
+        @media (max-width: 1024px) {
+            .main-dashboard {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        /* Glass Cards Base */
+        .glass-card {
+            background: var(--glass-bg);
+            backdrop-filter: blur(18px);
+            -webkit-backdrop-filter: blur(18px);
+            border: 1.5px solid var(--glass-border);
+            border-radius: 22px;
+            padding: 22px;
+            box-shadow: var(--glass-shadow);
+            transition: all 0.3s cubic-bezier(0.2, 0.8, 0.2, 1);
+            position: relative;
+        }
+
+        .glass-card:hover {
+            box-shadow: 0 18px 45px -10px rgba(0, 0, 0, 0.3), 0 0 0 1.5px rgba(37, 99, 235, 0.4);
+        }
+
+        /* Kolom Kiri: Sidebar Widget RPG */
+        .left-sidebar {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+
+        /* Profile & Hero Card */
+        .profile-card {
+            text-align: center;
+            padding: 28px 20px 22px 20px;
+        }
+
+        .avatar-box {
+            position: relative;
+            width: 84px;
+            height: 84px;
+            margin: 0 auto 14px auto;
+        }
+
+        .avatar-img {
+            width: 100%;
+            height: 100%;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 3px solid #ffffff;
+            box-shadow: 0 6px 20px var(--primary-glow);
+        }
+
+        .avatar-badge {
+            position: absolute;
+            bottom: -2px;
+            right: -2px;
+            background: #10b981;
+            color: white;
+            font-size: 10px;
+            font-weight: 800;
+            padding: 2px 7px;
+            border-radius: 20px;
+            border: 2px solid white;
+        }
+
+        .profile-name {
+            font-size: 20px;
+            font-weight: 800;
+            color: #0f172a;
+            margin-bottom: 4px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 6px;
+        }
+
+        .profile-title {
+            font-size: 12.5px;
+            color: var(--text-muted);
+            margin-bottom: 16px;
+        }
+
+        /* Level & XP Progress Bar */
+        .xp-container {
+            background: rgba(255, 255, 255, 0.7);
+            border-radius: 14px;
+            padding: 12px 14px;
+            margin-bottom: 16px;
+            border: 1px solid rgba(255, 255, 255, 0.8);
+        }
+
+        .xp-header {
+            display: flex;
+            justify-content: space-between;
+            font-size: 11.5px;
+            font-weight: 700;
+            margin-bottom: 6px;
+            color: var(--text-muted);
+        }
+
+        .xp-bar-bg {
+            width: 100%;
+            height: 8px;
+            background: #e2e8f0;
+            border-radius: 10px;
+            overflow: hidden;
+            position: relative;
+        }
+
+        .xp-bar-fill {
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, #1e40af 0%, #2563eb 50%, #0ea5e9 100%);
+            border-radius: 10px;
+            animation: pulseGlow 2.5s infinite;
+        }
+
+        /* Current Quest Widget */
+        .quest-box {
+            background: linear-gradient(135deg, rgba(239, 246, 255, 0.95) 0%, rgba(255, 255, 255, 0.9) 100%);
+            border: 1.5px dashed #3b82f6;
+            border-radius: 16px;
+            padding: 14px 16px;
+            text-align: left;
+        }
+
+        .quest-title {
+            font-size: 11px;
+            text-transform: uppercase;
+            letter-spacing: 0.8px;
+            font-weight: 800;
+            color: var(--primary-deep);
+            margin-bottom: 4px;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .quest-desc {
+            font-size: 13px;
+            font-weight: 600;
+            color: #1e293b;
+            line-height: 1.4;
+        }
+
+        /* Music / Current Vibe Player Widget */
+        .music-widget {
+            display: flex;
+            align-items: center;
+            gap: 14px;
+        }
+
+        .music-album-art {
+            width: 52px;
+            height: 52px;
+            border-radius: 14px;
+            object-fit: cover;
+            border: 2px solid white;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+            flex-shrink: 0;
+        }
+
+        .music-info {
+            flex-grow: 1;
+            overflow: hidden;
+        }
+
+        .music-label {
+            font-size: 10px;
+            font-weight: 800;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            color: var(--primary-deep);
+            margin-bottom: 2px;
+        }
+
+        .music-title {
+            font-size: 13px;
+            font-weight: 700;
+            color: #0f172a;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        .music-artist {
+            font-size: 11px;
+            color: var(--text-muted);
+        }
+
+        .equalizer {
+            display: flex;
+            align-items: flex-end;
+            gap: 3px;
+            height: 18px;
+        }
+
+        .eq-bar {
+            width: 3.5px;
+            background: var(--primary);
+            border-radius: 3px;
+            animation: bounceBar 1.2s ease infinite alternate;
+        }
+
+        .eq-bar:nth-child(2) { animation-delay: 0.2s; height: 16px; }
+        .eq-bar:nth-child(3) { animation-delay: 0.4s; height: 10px; }
+        .eq-bar:nth-child(4) { animation-delay: 0.1s; height: 14px; }
+
+        /* Sticky Note Widget (Elegan Warm Champagne Parchment) */
+        .sticky-note {
+            background: linear-gradient(135deg, #fffbeb 0%, #fef3c7 100%);
+            border: 1px solid #fde68a;
+            border-radius: 16px;
+            padding: 16px 18px;
+            box-shadow: 0 8px 20px -4px var(--gold-glow);
+            transform: rotate(-1.5deg);
+            transition: transform 0.25s ease;
+        }
+
+        .sticky-note:hover {
+            transform: rotate(0deg) scale(1.02);
+        }
+
+        .sticky-header {
+            font-size: 10.5px;
+            font-weight: 800;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            color: #b45309;
+            margin-bottom: 6px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .sticky-text {
+            font-family: 'Caveat', cursive, sans-serif;
+            font-size: 21px;
+            line-height: 1.25;
+            color: #78350f;
+        }
+
+        /* Tech Stack HUD */
+        .tech-tags {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+        }
+
+        .tech-pill {
+            background: rgba(255, 255, 255, 0.9);
+            border: 1px solid rgba(226, 232, 240, 0.85);
+            padding: 5px 12px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 600;
+            color: #334155;
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            transition: all 0.2s;
+        }
+
+        .tech-pill:hover {
+            background: #eff6ff;
+            color: var(--primary-deep);
+            border-color: var(--primary);
+            transform: translateY(-2px);
+        }
+
+        /* Kolom Kanan: Main Content & Quest Cards */
+        .right-content {
+            display: flex;
+            flex-direction: column;
+            gap: 22px;
+        }
+
+        /* Hero Banner */
+        .hero-banner {
+            background: linear-gradient(135deg, rgba(255, 255, 255, 0.9) 0%, rgba(240, 249, 255, 0.85) 100%);
+            padding: 26px 30px;
+            border-radius: 24px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 20px;
+            flex-wrap: wrap;
+        }
+
+        .hero-banner h1 {
+            font-size: 27px;
+            font-weight: 800;
+            color: #0f172a;
+            line-height: 1.25;
+            margin-bottom: 6px;
+        }
+
+        .hero-banner h1 span {
+            background: linear-gradient(90deg, #1e40af, #2563eb, #0ea5e9);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .hero-banner p {
+            font-size: 14.5px;
+            color: var(--text-muted);
+            max-width: 580px;
+            line-height: 1.5;
+        }
+
+        /* Filter Tab Buttons */
+        .filter-nav {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+
+        .filter-btn {
+            background: rgba(255, 255, 255, 0.85);
+            backdrop-filter: blur(12px);
+            border: 1px solid var(--glass-border);
+            padding: 9px 18px;
+            border-radius: 30px;
+            font-size: 13px;
+            font-weight: 700;
+            color: #334155;
+            cursor: pointer;
+            transition: all 0.25s ease;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.06);
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .filter-btn:hover {
+            background: #ffffff;
+            color: var(--primary-deep);
+            transform: translateY(-2px);
+        }
+
+        .filter-btn.active {
+            background: linear-gradient(135deg, #1e40af 0%, #2563eb 100%);
+            color: #ffffff;
+            border-color: transparent;
+            box-shadow: 0 6px 20px var(--primary-glow);
+        }
+
+        /* Section Title Heading */
+        .section-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-top: 10px;
+        }
+
+        .section-header h2 {
+            font-size: 18px;
+            font-weight: 800;
+            color: #ffffff;
+            text-shadow: 0 2px 12px rgba(0, 0, 0, 0.7);
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .badge-cat {
+            background: rgba(255, 255, 255, 0.92);
+            color: var(--primary-deep);
+            font-size: 12px;
+            padding: 3px 12px;
+            border-radius: 12px;
+            font-weight: 700;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+        }
+
+        /* Task Cards Grid */
+        .cards-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(310px, 1fr));
+            gap: 20px;
+        }
+
+        /* RPG Waypoint Quest Card */
+        .quest-card {
+            background: var(--glass-bg);
+            backdrop-filter: blur(18px);
+            -webkit-backdrop-filter: blur(18px);
+            border: 1.5px solid var(--glass-border);
+            border-radius: 20px;
+            padding: 22px;
+            box-shadow: var(--glass-shadow);
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            transition: all 0.3s cubic-bezier(0.2, 0.8, 0.2, 1);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .quest-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 4px;
+            background: linear-gradient(90deg, #1e40af, #3b82f6);
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        .quest-card:hover {
+            transform: translateY(-6px);
+            box-shadow: 0 22px 45px -10px rgba(0, 0, 0, 0.3), 0 0 0 2px rgba(37, 99, 235, 0.35);
+            border-color: rgba(255, 255, 255, 0.95);
+        }
+
+        .quest-card:hover::before {
+            opacity: 1;
+        }
+
+        .card-top {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 12px;
+        }
+
+        /* Waypoint Sapphire Pin Marker (Elegan: 01, 02, etc.) */
+        .pin-marker {
+            background: linear-gradient(135deg, #1e3a8a 0%, #2563eb 100%);
+            color: white;
+            font-size: 12px;
+            font-weight: 800;
+            padding: 4px 11px;
+            border-radius: 30px;
+            box-shadow: 0 4px 10px rgba(37, 99, 235, 0.35);
+            display: inline-flex;
+            align-items: center;
+            gap: 5px;
+        }
+
+        .card-file-tag {
+            font-family: 'Consolas', 'Courier New', monospace;
+            font-size: 11.5px;
+            background: rgba(255, 255, 255, 0.92);
+            color: #334155;
+            padding: 4px 9px;
+            border-radius: 8px;
+            border: 1px solid #cbd5e1;
+            font-weight: 700;
+        }
+
+        .quest-card h3 {
+            font-size: 16.5px;
+            font-weight: 700;
+            color: #0f172a;
+            margin-bottom: 8px;
+            line-height: 1.35;
+        }
+
+        .quest-card p {
+            font-size: 13px;
+            color: var(--text-muted);
+            line-height: 1.5;
+            margin-bottom: 20px;
+            flex-grow: 1;
+        }
+
+        .card-bottom {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 12px;
+            margin-top: auto;
+        }
+
+        .badge-status {
+            font-size: 11px;
+            font-weight: 700;
+            color: #059669;
+            background: #d1fae5;
+            padding: 4px 10px;
+            border-radius: 20px;
+            display: inline-flex;
+            align-items: center;
+            gap: 4px;
+        }
+
+        /* Action Button */
+        .btn-launch {
+            background: linear-gradient(135deg, #1e40af 0%, #2563eb 100%);
+            color: #ffffff;
+            text-decoration: none;
+            font-size: 13px;
+            font-weight: 700;
+            padding: 8px 16px;
+            border-radius: 12px;
+            box-shadow: 0 4px 12px var(--primary-glow);
+            transition: all 0.2s ease;
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .btn-launch:hover {
+            background: linear-gradient(135deg, #1d4ed8 0%, #1e3a8a 100%);
+            transform: translateY(-2px);
+            box-shadow: 0 6px 16px rgba(30, 64, 175, 0.5);
+            color: white;
+        }
+
+        /* Footer Dashboard */
+        footer {
+            margin-top: 40px;
+            text-align: center;
+            color: #ffffff;
+            font-size: 13px;
+            text-shadow: 0 2px 10px rgba(0, 0, 0, 0.8);
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+            align-items: center;
+        }
+
+        footer .footer-badge {
+            background: rgba(255, 255, 255, 0.18);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            padding: 4px 14px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 600;
+        }
+
+        /* Keyframe Animations */
+        @keyframes floatSlow {
+            0% { transform: translateY(0px); }
+            100% { transform: translateY(-5px); }
+        }
+
+        @keyframes pulseGlow {
+            0%, 100% { opacity: 1; filter: brightness(1); }
+            50% { opacity: 0.85; filter: brightness(1.15); }
+        }
+
+        @keyframes bounceBar {
+            0% { height: 4px; }
+            100% { height: 18px; }
+        }
+    </style>
+</head>
+<body>
+    <!-- Canvas Efek Partikel Halus (Moonlight Petals & Ambient Dust) -->
+    <canvas id="sakura-canvas"></canvas>
+
+    <div class="dashboard-wrapper">
+        <!-- Top HUD Status (Bar Game Tanpa Navbar) -->
+        <header class="hud-topbar">
+            <div class="hud-badge-brand">
+                <span class="brand-icon">⚡</span>
+                <span>DESAIN UI/UX &bull; PRAKTIKUM 5</span>
+            </div>
+
+            <div class="hud-stats-group">
+                <div class="hud-pill" id="live-clock">
+                    <span>⏰</span>
+                    <span id="clock-text">14:45 WIB</span>
+                </div>
+                <div class="hud-pill">
+                    <span>🏆</span>
+                    <span>9 / 9 Tasks Ready</span>
+                </div>
+                <div class="hud-pill highlight">
+                    <span>💎</span>
+                    <span>Level 5: Master UI/UX</span>
+                </div>
+            </div>
+        </header>
+
+        <!-- Main Dashboard: 2 Kolom (Sidebar Widget RPG + Konten Tugas) -->
+        <main class="main-dashboard">
+            <!-- Kolom Kiri: Profil, Quest Widget, Sticky Note, Music Player -->
+            <aside class="left-sidebar">
+                <!-- Profil Pengembang / Mahasiswa -->
+                <div class="glass-card profile-card">
+                    <div class="avatar-box">
+                        <img src="img/bmw2.jpg" alt="Avatar Profil" class="avatar-img">
+                        <span class="avatar-badge">Lv. 5</span>
+                    </div>
+                    <div class="profile-name">
+                        <span>STT Terpadu Nurul Fikri</span>
+                    </div>
+                    <div class="profile-title">Desain UI/UX Pemrograman Web</div>
+
+                    <!-- Progress XP Bar -->
+                    <div class="xp-container">
+                        <div class="xp-header">
+                            <span>QUEST PROGRESS</span>
+                            <span>100% COMPLETE</span>
+                        </div>
+                        <div class="xp-bar-bg">
+                            <div class="xp-bar-fill"></div>
+                        </div>
+                    </div>
+
+                    <!-- Current Quest Widget -->
+                    <div class="quest-box">
+                        <div class="quest-title">
+                            <span>🎯 CURRENT QUEST</span>
+                        </div>
+                        <div class="quest-desc">
+                            Kuasai CSS Box Model, Positioning & Responsive FlexBox Layout.
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Music / Vibe Player Widget -->
+                <div class="glass-card music-widget">
+                    <img src="img/bmw4.jpg" alt="Vibe Art" class="music-album-art">
+                    <div class="music-info">
+                        <div class="music-label">Current Vibe 🎵</div>
+                        <div class="music-title">Sunset Alpine Drive</div>
+                        <div class="music-artist">Lofi Chill &bull; BMW M4 GT Mode</div>
+                    </div>
+                    <div class="equalizer">
+                        <div class="eq-bar"></div>
+                        <div class="eq-bar"></div>
+                        <div class="eq-bar"></div>
+                        <div class="eq-bar"></div>
+                    </div>
+                </div>
+
+                <!-- Sticky Note Widget (Champagne Parchment) -->
+                <div class="sticky-note">
+                    <div class="sticky-header">
+                        <span>NOTE TO SELF</span>
+                        <span>⭐</span>
+                    </div>
+                    <div class="sticky-text">
+                        Progress, not perfection. Every line of CSS creates art!
+                    </div>
+                </div>
+
+                <!-- Tech Stack HUD -->
+                <div class="glass-card">
+                    <div style="font-size: 11.5px; font-weight: 800; color: var(--primary-deep); text-transform: uppercase; margin-bottom: 12px; letter-spacing: 0.6px;">
+                        🛠️ Mastered Tech Stack
+                    </div>
+                    <div class="tech-tags">
+                        <span class="tech-pill">🌐 HTML5</span>
+                        <span class="tech-pill">🎨 CSS3</span>
+                        <span class="tech-pill">📦 Box Model</span>
+                        <span class="tech-pill">⚡ FlexBox</span>
+                        <span class="tech-pill">📍 Positioning</span>
+                        <span class="tech-pill">📱 Responsive</span>
+                    </div>
+                </div>
+            </aside>
+
+            <!-- Kolom Kanan: Hero Info, Filter Tab & Kartu Tugas -->
+            <section class="right-content">
+                <!-- Hero Banner -->
+                <div class="glass-card hero-banner">
+                    <div>
+                        <h1>Interactive <span>Quest Portal</span></h1>
+                        <p>Eksplorasi seluruh implementasi CSS Box, Positioning, dan FlexBox responsif sesuai modul praktikum. Klik kartu tugas untuk langsung masuk ke halaman tugas.</p>
+                    </div>
+
+                    <!-- Filter Kategori Tugas -->
+                    <div class="filter-nav">
+                        <button class="filter-btn active" onclick="filterTasks('all', this)">
+                            <span>📋</span> Semua Tugas (9)
+                        </button>
+                        <button class="filter-btn" onclick="filterTasks('box', this)">
+                            <span>📦</span> Bagian A: Box (4)
+                        </button>
+                        <button class="filter-btn" onclick="filterTasks('flexbox', this)">
+                            <span>⚡</span> Bagian B: FlexBox (5)
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Section Heading -->
+                <div class="section-header">
+                    <h2>
+                        <span>Daftar Halaman Praktikum</span>
+                        <span class="badge-cat" id="filter-label">9 Tugas Tersedia</span>
+                    </h2>
+                </div>
+
+                <!-- Grid Kartu Tugas (Quest Cards) -->
+                <div class="cards-grid">
+                    <!-- Tugas 1: cssbox1.html -->
+                    <div class="quest-card" data-category="box">
+                        <div class="card-top">
+                            <span class="pin-marker">01</span>
+                            <span class="card-file-tag">cssbox1.html</span>
+                        </div>
+                        <h3>1. Box & Positioning (Gambar 1)</h3>
+                        <p>Mockup browser Moqzilla dengan 4 kotak vertikal berwarna (kuning, oranye, hijau muda, cyan) sesuai instruksi Gambar 1 modul.</p>
+                        <div class="card-bottom">
+                            <span class="badge-status">&#10003; Selesai</span>
+                            <a href="cssbox1.html" class="btn-launch">Buka &rarr;</a>
+                        </div>
+                    </div>
+
+                    <!-- Tugas 2: cssbox1_image.html -->
+                    <div class="quest-card" data-category="box">
+                        <div class="card-top">
+                            <span class="pin-marker">02</span>
+                            <span class="card-file-tag">cssbox1_image.html</span>
+                        </div>
+                        <h3>2. Modifikasi Box Gambar (Gambar 2)</h3>
+                        <p>Modifikasi 4 kotak dengan memasukkan gambar burung (burung1.png s/d burung4.png) ke dalam elemen div sesuai Gambar 2 modul.</p>
+                        <div class="card-bottom">
+                            <span class="badge-status">&#10003; Selesai</span>
+                            <a href="cssbox1_image.html" class="btn-launch">Buka &rarr;</a>
+                        </div>
+                    </div>
+
+                    <!-- Tugas 3: cssbox2.html -->
+                    <div class="quest-card" data-category="box">
+                        <div class="card-top">
+                            <span class="pin-marker">03</span>
+                            <span class="card-file-tag">cssbox2.html</span>
+                        </div>
+                        <h3>3. Layout CSS Box 2 (Gambar 3)</h3>
+                        <p>Implementasi layout kotak hijau atas penuh, 2 kotak kuning di kolom kiri, serta kotak oranye dan cyan di kolom kanan sesuai Gambar 3.</p>
+                        <div class="card-bottom">
+                            <span class="badge-status">&#10003; Selesai</span>
+                            <a href="cssbox2.html" class="btn-launch">Buka &rarr;</a>
+                        </div>
+                    </div>
+
+                    <!-- Tugas 4: cssbox3.html -->
+                    <div class="quest-card" data-category="box">
+                        <div class="card-top">
+                            <span class="pin-marker">04</span>
+                            <span class="card-file-tag">cssbox3.html</span>
+                        </div>
+                        <h3>4. Layout CSS Box 3 (Gambar 4)</h3>
+                        <p>Layout kotak kombinasi 3 baris: atas (kuning + oranye), tengah (hijau + abu-abu besar + cyan), dan bawah (biru tua penuh) sesuai Gambar 4.</p>
+                        <div class="card-bottom">
+                            <span class="badge-status">&#10003; Selesai</span>
+                            <a href="cssbox3.html" class="btn-launch">Buka &rarr;</a>
+                        </div>
+                    </div>
+
+                    <!-- Tugas 5: flexbox1.html -->
+                    <div class="quest-card" data-category="flexbox">
+                        <div class="card-top">
+                            <span class="pin-marker">05</span>
+                            <span class="card-file-tag">flexbox1.html</span>
+                        </div>
+                        <h3>5. Header Nav STT-NF (Gambar 5)</h3>
+                        <p>Header navigasi flexbox dengan logo STT-NF di kiri (margin-right: auto) dan menu di kanan, serta daftar program studi STT-NF.</p>
+                        <div class="card-bottom">
+                            <span class="badge-status">&#10003; Selesai</span>
+                            <a href="flexbox1.html" class="btn-launch">Buka &rarr;</a>
+                        </div>
+                    </div>
+
+                    <!-- Tugas 6: flexbox2.html -->
+                    <div class="quest-card" data-category="flexbox">
+                        <div class="card-top">
+                            <span class="pin-marker">06</span>
+                            <span class="card-file-tag">flexbox2.html</span>
+                        </div>
+                        <h3>6. Layout FlexBox 2 (Gambar 6)</h3>
+                        <p>Desain layout flexbox 3 kolom: Header kuning, tengah (Article putih, Aside pink, Nav cyan toska), dan Footer kuning sesuai Gambar 6.</p>
+                        <div class="card-bottom">
+                            <span class="badge-status">&#10003; Selesai</span>
+                            <a href="flexbox2.html" class="btn-launch">Buka &rarr;</a>
+                        </div>
+                    </div>
+
+                    <!-- Tugas 7: flexbox3.html -->
+                    <div class="quest-card" data-category="flexbox">
+                        <div class="card-top">
+                            <span class="pin-marker">07</span>
+                            <span class="card-file-tag">flexbox3.html</span>
+                        </div>
+                        <h3>7. Galeri Foto FlexBox (Gambar 7)</h3>
+                        <p>Penataan foto responsif dengan Flexbox pola 3 foto - 2 foto lebar - 3 foto dengan bingkai rounded border tebal sesuai Gambar 7.</p>
+                        <div class="card-bottom">
+                            <span class="badge-status">&#10003; Selesai</span>
+                            <a href="flexbox3.html" class="btn-launch">Buka &rarr;</a>
+                        </div>
+                    </div>
+
+                    <!-- Tugas 8: flexbox4a.html -->
+                    <div class="quest-card" data-category="flexbox">
+                        <div class="card-top">
+                            <span class="pin-marker">08</span>
+                            <span class="card-file-tag">flexbox4a.html</span>
+                        </div>
+                        <h3>8. Layout FlexBox 4 (a) - Gambar 8a</h3>
+                        <p>Layout dengan Sidebar Nav di sisi kiri penuh (pink muda), berdampingan dengan kolom kanan (Header, Article + Aside, Footer).</p>
+                        <div class="card-bottom">
+                            <span class="badge-status">&#10003; Selesai</span>
+                            <a href="flexbox4a.html" class="btn-launch">Buka &rarr;</a>
+                        </div>
+                    </div>
+
+                    <!-- Tugas 9: flexbox4b.html -->
+                    <div class="quest-card" data-category="flexbox">
+                        <div class="card-top">
+                            <span class="pin-marker">09</span>
+                            <span class="card-file-tag">flexbox4b.html</span>
+                        </div>
+                        <h3>9. Layout FlexBox 4 (b) - Gambar 8b</h3>
+                        <p>Layout container toska pastel dengan Aside di kiri dan Card Article merah/coral di kanan yang memuat 3 sub-kotak Image berjejer horizontal.</p>
+                        <div class="card-bottom">
+                            <span class="badge-status">&#10003; Selesai</span>
+                            <a href="flexbox4b.html" class="btn-launch">Buka &rarr;</a>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </main>
+
+        <footer>
+            <div class="footer-badge">&copy; 2026 Praktikum Desain UI/UX &bull; STT Terpadu Nurul Fikri</div>
+            <p>Dibuat dengan kombinasi aesthetic Grand Tourer dashboard & ambient moonlight visuals</p>
+        </footer>
+    </div>
+
+    <!-- Script Efek Dinamis: Partikel Moonlight Silver Halus, Jam Digital, & Filter Kategori -->
+    <script>
+        // 1. Digital Clock Update
+        function updateClock() {
+            const now = new Date();
+            const hours = String(now.getHours()).padStart(2, '0');
+            const minutes = String(now.getMinutes()).padStart(2, '0');
+            const clockEl = document.getElementById('clock-text');
+            if (clockEl) {
+                clockEl.textContent = `${hours}:${minutes} WIB`;
+            }
+        }
+        setInterval(updateClock, 1000);
+        updateClock();
+
+        // 2. Filter Kategori Tugas
+        function filterTasks(category, btn) {
+            document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+            btn.classList.add('active');
+
+            const cards = document.querySelectorAll('.quest-card');
+            let count = 0;
+
+            cards.forEach(card => {
+                if (category === 'all' || card.getAttribute('data-category') === category) {
+                    card.style.display = 'flex';
+                    count++;
+                } else {
+                    card.style.display = 'none';
+                }
+            });
+
+            const labelEl = document.getElementById('filter-label');
+            if (labelEl) {
+                labelEl.textContent = `${count} Tugas Ditampilkan`;
+            }
+        }
+
+        // 3. Dynamic Silver Moonlight & Ambient Stardust Petals
+        const canvas = document.getElementById('sakura-canvas');
+        const ctx = canvas.getContext('2d');
+
+        let width = canvas.width = window.innerWidth;
+        let height = canvas.height = window.innerHeight;
+
+        window.addEventListener('resize', () => {
+            width = canvas.width = window.innerWidth;
+            height = canvas.height = window.innerHeight;
+        });
+
+        const petalCount = 35;
+        const petals = [];
+
+        class Petal {
+            constructor() {
+                this.reset();
+            }
+
+            reset() {
+                this.x = Math.random() * width;
+                this.y = Math.random() * -height;
+                this.size = Math.random() * 8 + 5;
+                this.speedX = Math.random() * 1.4 - 0.4 + 0.6;
+                this.speedY = Math.random() * 1.1 + 0.8;
+                this.rotation = Math.random() * 360;
+                this.rotationSpeed = (Math.random() - 0.5) * 1.2;
+                this.opacity = Math.random() * 0.4 + 0.35;
+            }
+
+            update() {
+                this.x += this.speedX + Math.sin(this.y * 0.01) * 0.4;
+                this.y += this.speedY;
+                this.rotation += this.rotationSpeed;
+
+                if (this.y > height + 20 || this.x > width + 20) {
+                    this.reset();
+                    this.y = -20;
+                }
+            }
+
+            draw() {
+                ctx.save();
+                ctx.translate(this.x, this.y);
+                ctx.rotate((this.rotation * Math.PI) / 180);
+                ctx.globalAlpha = this.opacity;
+
+                // Bentuk kelopak silver moonlight dengan kilau halus
+                ctx.beginPath();
+                ctx.moveTo(0, 0);
+                ctx.bezierCurveTo(-this.size / 2, -this.size / 2, -this.size, this.size / 3, 0, this.size);
+                ctx.bezierCurveTo(this.size, this.size / 3, this.size / 2, -this.size / 2, 0, 0);
+                ctx.fillStyle = '#f8fafc';
+                ctx.fill();
+
+                ctx.strokeStyle = '#cbd5e1';
+                ctx.lineWidth = 0.5;
+                ctx.stroke();
+
+                ctx.restore();
+            }
+        }
+
+        for (let i = 0; i < petalCount; i++) {
+            petals.push(new Petal());
+        }
+
+        function animateSakura() {
+            ctx.clearRect(0, 0, width, height);
+            for (let i = 0; i < petals.length; i++) {
+                petals[i].update();
+                petals[i].draw();
+            }
+            requestAnimationFrame(animateSakura);
+        }
+        animateSakura();
+    </script>
+</body>
+</html>

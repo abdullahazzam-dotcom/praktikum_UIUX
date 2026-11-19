@@ -1,0 +1,122 @@
+/* CSS Layout Flexbox 4 (b) - Gambar 8 (b) layout flexbox 2 */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: Arial, sans-serif;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    background-color: #f0f2f5;
+    padding: 20px;
+}
+
+.caption-label {
+    margin-top: 15px;
+    font-size: 14px;
+    font-style: italic;
+    color: #444;
+}
+
+/* Wrapper latar toska/mint lembut */
+.outer-wrapper {
+    width: 650px;
+    background-color: #a3e4d7; /* Toska / mint pastel */
+    padding: 16px;
+    border-radius: 4px;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.15);
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+/* Header */
+header {
+    background-color: #80cbc4;
+    padding: 10px;
+    text-align: center;
+    color: #ffffff;
+    font-size: 14px;
+    font-weight: 500;
+    border-radius: 2px;
+}
+
+/* Konten Tengah: Aside (kiri) + Container Article & Images (kanan) */
+.middle-container {
+    display: flex;
+    gap: 12px;
+    height: 230px;
+}
+
+/* Aside di Kiri */
+aside {
+    width: 140px;
+    background-color: #4db6ac; /* Hijau toska lebih pekat */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #ffffff;
+    font-size: 14px;
+    font-weight: 500;
+    border-radius: 2px;
+}
+
+/* Kolom Kanan: Card Coral (Article + 3 Images) */
+.article-section {
+    flex: 1;
+    background-color: #ff7675; /* Coral / Merah muda */
+    border-radius: 2px;
+    padding: 15px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+}
+
+.article-title {
+    text-align: center;
+    color: #ffffff;
+    font-size: 14px;
+    font-weight: 500;
+    padding-top: 25px;
+}
+
+/* 3 Kotak Image */
+.images-row {
+    display: flex;
+    gap: 12px;
+}
+
+.image-card {
+    flex: 1;
+    height: 75px;
+    background-color: #dfe6e9; /* Abu-abu lembut / putih transparan */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #636e72;
+    font-size: 13px;
+    font-weight: 500;
+    border-radius: 2px;
+    transition: transform 0.2s, background-color 0.2s;
+}
+
+.image-card:hover {
+    transform: translateY(-2px);
+    background-color: #ffffff;
+}
+
+/* Footer */
+footer {
+    background-color: #80cbc4;
+    padding: 10px;
+    text-align: center;
+    color: #ffffff;
+    font-size: 14px;
+    font-weight: 500;
+    border-radius: 2px;
+}
